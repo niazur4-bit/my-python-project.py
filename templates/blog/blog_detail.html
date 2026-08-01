@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}{{ post.title }} | {{ SITE_NAME }}{% endblock %}
+{% block meta_description %}{{ post.excerpt }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <span class="eyebrow"><a href="{% url 'blog:list' %}" class="text-white-50">Blog</a> / {{ post.get_category_display }}</span>
+    <h1>{{ post.title }}</h1>
+    <p class="text-white-50 mt-2 mb-0">{{ post.published_at|date:"d F Y" }}{% if post.author %} &middot; by {{ post.author.get_full_name|default:post.author.username }}{% endif %}</p>
+  </div>
+</div>
+
+<section class="py-5 py-lg-6">
+  <div class="container">
+    <div class="row g-5">
+      <div class="col-lg-8">
+        {% if post.featured_image %}
+        <img src="{{ post.featured_image.url }}" class="w-100 mb-4" style="border-radius:3px; max-height:420px; object-fit:cover;" alt="{{ post.title }}">
+        {% endif %}
+        <div style="white-space: pre-line;">{{ post.content }}</div>
+      </div>
+      <div class="col-lg-4">
+        <h4 class="mb-3">More Articles</h4>
+        {% for r in recent_posts %}
+        <a href="{{ r.get_absolute_url }}" class="text-decoration-none">
+          <div class="ledger-line-item">
+            <span>{{ r.title }}</span>
+          </div>
+        </a>
+        {% endfor %}
+        <div class="card-form mt-4 text-center">
+          <h4>Need help with this?</h4>
+          <a href="{% url 'appointments:book' %}" class="btn btn-navy w-100 mt-2">Book a Consultation</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Contact Us | {{ SITE_NAME }}{% endblock %}
+{% block meta_description %}Get in touch with Munib and Co, Chartered Certified Accountants. Visit our office, call us, or send a message and we'll respond within one business day.{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <span class="eyebrow">Get in touch</span>
+    <h1>Contact Us</h1>
+  </div>
+</div>
+
+<section class="py-5 py-lg-6">
+  <div class="container">
+    <div class="row g-5">
+      <div class="col-lg-5">
+        <h2 class="mb-4">Visit or reach out</h2>
+        <div class="ledger-line-item">
+          <span><i class="bi bi-geo-alt text-green me-2"></i>Office Address</span>
+          <span class="text-secondary text-end">Madyan Road, Swat,<br>Khyber Pakhtunkhwa, Pakistan</span>
+        </div>
+        <div class="ledger-line-item">
+          <span><i class="bi bi-telephone text-green me-2"></i>Phone</span>
+          <span class="text-secondary">+92 3428969889</span>
+        </div>
+        <div class="ledger-line-item">
+          <span><i class="bi bi-envelope text-green me-2"></i>Email</span>
+          <span class="text-secondary">info@munibandco.com</span>
+        </div>
+        <div class="ledger-line-item">
+          <span><i class="bi bi-clock text-green me-2"></i>Office Hours</span>
+          <span class="text-secondary text-end">Mon - Sat<br>9:00 AM - 6:00 PM</span>
+        </div>
+
+        <div class="ratio ratio-4x3 mt-4" style="border-radius:3px; overflow:hidden; border:1px solid var(--rule);">
+          <iframe src="{{ maps_src }}" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Munib and Co office location"></iframe>
+        </div>
+      </div>
+
+      <div class="col-lg-7">
+        <div class="card-form">
+          <h2 class="mb-4">Send us a message</h2>
+          <form method="post" class="needs-validation" novalidate>
+            {% csrf_token %}
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="{{ form.name.id_for_label }}">Full Name</label>
+                {{ form.name }}
+              </div>
+              <div class="col-md-6">
+                <label for="{{ form.email.id_for_label }}">Email</label>
+                {{ form.email }}
+              </div>
+              <div class="col-md-6">
+                <label for="{{ form.phone.id_for_label }}">Phone (optional)</label>
+                {{ form.phone }}
+              </div>
+              <div class="col-md-6">
+                <label for="{{ form.subject.id_for_label }}">Subject</label>
+                {{ form.subject }}
+              </div>
+              <div class="col-12">
+                <label for="{{ form.message.id_for_label }}">Message</label>
+                {{ form.message }}
+              </div>
+            </div>
+            <button type="submit" class="btn btn-navy px-4 mt-4">Send Message</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

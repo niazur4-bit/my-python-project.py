@@ -1,0 +1,155 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+  (function () {
+    var saved = localStorage.getItem("theme");
+    var theme = saved || (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    if (theme === "dark") document.documentElement.setAttribute("data-theme", "dark");
+  })();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}{{ SITE_NAME }}{% endblock %}</title>
+<meta name="description" content="{% block meta_description %}Munib and Co is a Chartered Certified Accountant firm offering income tax filing, sales tax filing, SECP incorporation, bookkeeping, audit and FBR/SECP/PRA compliance services in Pakistan.{% endblock %}">
+<meta name="keywords" content="{% block meta_keywords %}chartered accountant, tax consultant Pakistan, income tax filing, sales tax filing, SECP registration, NTN registration, bookkeeping, audit firm, FBR compliance{% endblock %}">
+<meta name="author" content="Munib and Co">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="{{ SITE_DOMAIN }}{{ request.path }}">
+
+<!-- Open Graph -->
+<meta property="og:site_name" content="{{ SITE_NAME }}">
+<meta property="og:title" content="{% block og_title %}{{ SITE_NAME }}{% endblock %}">
+<meta property="og:description" content="{% block og_description %}Trusted Chartered Certified Accountants for tax, audit, bookkeeping and business compliance.{% endblock %}">
+<meta property="og:type" content="website">
+<meta property="og:url" content="{{ SITE_DOMAIN }}{{ request.path }}">
+
+<link rel="icon" href="{% static 'img/favicon.svg' %}" type="image/svg+xml">
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<!-- Bootstrap 5 -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+<link href="{% static 'css/style.css' %}" rel="stylesheet">
+{% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-firm sticky-top py-3">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'core:home' %}">
+      <span>
+        Munib and Co
+        <small>Chartered Certified Accountants</small>
+      </span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
+        <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'core:home' %}">Home</a></li>
+        <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}" href="{% url 'core:about' %}">About</a></li>
+        <li class="nav-item"><a class="nav-link {% if request.resolver_match.app_name == 'services' %}active{% endif %}" href="{% url 'services:list' %}">Services</a></li>
+        <li class="nav-item"><a class="nav-link {% if request.resolver_match.app_name == 'blog' %}active{% endif %}" href="{% url 'blog:list' %}">Blog</a></li>
+        <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'faq' %}active{% endif %}" href="{% url 'core:faq' %}">FAQ</a></li>
+        <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'documents' %}active{% endif %}" href="{% url 'core:documents' %}">Downloads</a></li>
+        <li class="nav-item"><a class="nav-link {% if request.resolver_match.app_name == 'contact' %}active{% endif %}" href="{% url 'contact:contact' %}">Contact</a></li>
+      </ul>
+      <form class="d-flex mx-lg-3 my-3 my-lg-0" action="{% url 'core:search' %}" method="get" role="search">
+        <input class="form-control form-control-sm" type="search" name="q" placeholder="Search services, articles..." aria-label="Search" style="min-width:200px;">
+      </form>
+      <div class="d-flex gap-2 align-items-center">
+        <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+          <i class="bi bi-moon-stars"></i>
+          <i class="bi bi-sun"></i>
+        </button>
+        {% if user.is_authenticated %}
+          <a href="{% url 'accounts:dashboard_redirect' %}" class="btn btn-outline-navy btn-sm px-3"><i class="bi bi-person-circle me-1"></i>{{ user.first_name|default:user.username }}</a>
+          <form action="{% url 'accounts:logout' %}" method="post" class="d-inline m-0">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-navy btn-sm px-3">Logout</button>
+          </form>
+        {% else %}
+          <a href="{% url 'accounts:login' %}" class="btn btn-outline-navy btn-sm px-3">Login</a>
+          <a href="{% url 'appointments:book' %}" class="btn btn-brass btn-sm px-3">Book Appointment</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</nav>
+
+{% if messages %}
+<div class="container mt-3">
+  {% for message in messages %}
+  <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+    {{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<main>
+{% block content %}{% endblock %}
+</main>
+
+<footer class="footer-firm">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-4">
+        <h5>Munib and Co</h5>
+        <p>Chartered Certified Accountants providing tax, audit, bookkeeping and business compliance services you can rely on.</p>
+        <div class="d-flex gap-3 mt-3 fs-5">
+  <a href="https://facebook.com/Munib Ur Rahman" target="_blank" rel="noopener"><i class="bi bi-facebook"></i></a>
+  <a href="https://linkedin.com/company/munibandco" target="_blank" rel="noopener"><i class="bi bi-linkedin"></i></a>
+  <a href="https://twitter.com/munibandco" target="_blank" rel="noopener"><i class="bi bi-twitter-x"></i></a>
+  <a href="https://wa.me/923428969289" target="_blank" rel="noopener"><i class="bi bi-whatsapp"></i></a>
+</div>
+      </div>
+      <div class="col-lg-2 col-6">
+        <h5>Firm</h5>
+        <ul class="list-unstyled d-grid gap-2">
+          <li><a href="{% url 'core:about' %}">About Us</a></li>
+          <li><a href="{% url 'blog:list' %}">Blog &amp; News</a></li>
+          <li><a href="{% url 'core:faq' %}">FAQ</a></li>
+          <li><a href="{% url 'contact:contact' %}">Contact</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-3 col-6">
+        <h5>Services</h5>
+        <ul class="list-unstyled d-grid gap-2">
+          <li><a href="{% url 'services:list' %}">Income Tax Filing</a></li>
+          <li><a href="{% url 'services:list' %}">Sales Tax Filing</a></li>
+          <li><a href="{% url 'services:list' %}">SECP Incorporation</a></li>
+          <li><a href="{% url 'core:documents' %}">Download Tax Forms</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-3">
+        <h5>Get in Touch</h5>
+        <ul class="list-unstyled d-grid gap-2">
+          <li><i class="bi bi-geo-alt me-2"></i>Madyan Road, Swat, Khyber Pakhtunkhwa</li>
+          <li><i class="bi bi-telephone me-2"></i>+92 3428969289
+          </li>
+          <li><i class="bi bi-envelope me-2"></i>niazur4@gmail.com</li>
+        </ul>
+      </div>
+    </div>
+    <hr class="ledger-rule">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 small">
+      <span>&copy; {% now "Y" %} Munib and Co - Chartered Certified Accountant. All rights reserved.</span>
+      <span>Built for clients who value precision.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="{% static 'js/main.js' %}"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}My Profile | {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <span class="eyebrow">Client portal</span>
+    <h1>My Profile</h1>
+  </div>
+</div>
+
+<section class="py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="card-form">
+          <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+            {% csrf_token %}
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="{{ form.first_name.id_for_label }}">First Name</label>
+                {{ form.first_name }}
+              </div>
+              <div class="col-md-6">
+                <label for="{{ form.last_name.id_for_label }}">Last Name</label>
+                {{ form.last_name }}
+              </div>
+              <div class="col-md-6">
+                <label for="{{ form.email.id_for_label }}">Email</label>
+                {{ form.email }}
+              </div>
+              <div class="col-md-6">
+                <label for="{{ form.phone.id_for_label }}">Phone</label>
+                {{ form.phone }}
+              </div>
+              <div class="col-md-6">
+                <label for="{{ form.cnic.id_for_label }}">CNIC</label>
+                {{ form.cnic }}
+              </div>
+              <div class="col-md-6">
+                <label for="{{ form.company_name.id_for_label }}">Company</label>
+                {{ form.company_name }}
+              </div>
+              <div class="col-12">
+                <label for="{{ form.address.id_for_label }}">Address</label>
+                {{ form.address }}
+              </div>
+              <div class="col-12">
+                <label for="{{ form.profile_photo.id_for_label }}">Profile Photo</label>
+                {{ form.profile_photo }}
+              </div>
+            </div>
+            <button type="submit" class="btn btn-navy px-4 mt-4">Save Changes</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

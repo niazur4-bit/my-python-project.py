@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Our Services | {{ SITE_NAME }}{% endblock %}
+{% block meta_description %}Income tax filing, sales tax filing, SECP incorporation, NTN &amp; STRN registration, bookkeeping, audit and FBR/SECP/PRA compliance services from Munib and Co.{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <span class="eyebrow">What we offer</span>
+    <h1>Services</h1>
+    <p class="text-white-50 mt-2 mb-0" style="max-width:640px;">Every service below is handled by a dedicated accountant from intake to filing — no handoffs, no guesswork.</p>
+  </div>
+</div>
+
+<section class="py-5 py-lg-6">
+  <div class="container">
+    <div class="row g-4">
+      {% for service in services %}
+      <div class="col-md-6 col-lg-4">
+        <a href="{{ service.get_absolute_url }}" class="text-decoration-none">
+          <div class="card-service">
+            <div class="icon-wrap"><i class="bi {{ service.icon }}"></i></div>
+            <h3>{{ service.title }}</h3>
+            <p>{{ service.short_description }}</p>
+            {% if service.fee_note %}<p class="small text-brass fw-semibold mt-2 mb-0">{{ service.fee_note }}</p>{% endif %}
+          </div>
+        </a>
+      </div>
+      {% empty %}
+      <div class="col-12 text-center text-muted py-5">
+        <i class="bi bi-inboxes fs-1 d-block mb-3"></i>
+        No services published yet. Add services from the admin panel.
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

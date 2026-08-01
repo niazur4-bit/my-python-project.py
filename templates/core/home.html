@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ SITE_NAME }} | Tax, Audit &amp; Business Compliance{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-7">
+        <span class="eyebrow">Chartered Certified Accountants</span>
+        <h1 class="mt-3">Your books, your taxes, your compliance — kept in order, every entry.</h1>
+        <p class="lead mt-3">Munib and Co helps individuals and businesses across Pakistan file taxes correctly, incorporate with SECP, and stay compliant with FBR, SECP and PRA — without the paperwork headache.</p>
+        <div class="d-flex flex-wrap gap-3 mt-4">
+          <a href="{% url 'appointments:book' %}" class="btn btn-brass btn-lg px-4">Book a Free Consultation</a>
+          <a href="{% url 'services:list' %}" class="btn btn-outline-light btn-lg px-4">Explore Services</a>
+        </div>
+        <div class="hero-stats">
+          <div>
+            <span class="stat-number" data-counter="1200">0</span>
+            <span class="stat-label">Filings completed</span>
+          </div>
+          <div>
+            <span class="stat-number" data-counter="15">0</span>
+            <span class="stat-label">Years in practice</span>
+          </div>
+          <div>
+            <span class="stat-number" data-counter="98">0</span>
+            <span class="stat-label">% client retention</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-5 d-flex justify-content-center">
+        <div class="seal">
+          <div class="seal-inner">
+            Chartered · Certified<br>
+            <strong>M &amp; Co</strong>
+            Est. Practice · Pakistan
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ledger-section py-5 py-lg-6 bg-paper">
+  <div class="container py-4">
+    <div class="section-heading text-center mx-auto" style="max-width:640px;">
+      <span class="eyebrow d-inline-flex mx-auto">What we do</span>
+      <h2>Services built around the accounts you actually have to file</h2>
+    </div>
+    <div class="row g-4">
+      {% for service in services %}
+      <div class="col-md-6 col-lg-3">
+        <a href="{{ service.get_absolute_url }}" class="text-decoration-none">
+          <div class="card-service">
+            <div class="icon-wrap"><i class="bi {{ service.icon }}"></i></div>
+            <h3>{{ service.title }}</h3>
+            <p>{{ service.short_description }}</p>
+          </div>
+        </a>
+      </div>
+      {% empty %}
+      <p class="text-center text-muted">Services will appear here once added from the admin panel.</p>
+      {% endfor %}
+    </div>
+    <div class="text-center mt-5">
+      <a href="{% url 'services:list' %}" class="btn btn-outline-navy px-4">View All Services <i class="bi bi-arrow-right ms-1"></i></a>
+    </div>
+  </div>
+</section>
+
+<section class="py-5 py-lg-6">
+  <div class="container py-4">
+    <div class="row g-5 align-items-center">
+      <div class="col-lg-6">
+        <span class="eyebrow">Why Munib and Co</span>
+        <h2 class="mt-3">Precision isn't optional in accounting. It's the whole job.</h2>
+        <p class="text-secondary mt-3">Every return, every reconciliation, every SECP filing goes through the same disciplined process — verified line by line before it ever reaches a regulator's desk.</p>
+        <div class="mt-4">
+          <div class="ledger-line-item">
+            <span><i class="bi bi-check2-circle text-green me-2"></i>FBR &amp; PRA registered practitioners</span>
+          </div>
+          <div class="ledger-line-item">
+            <span><i class="bi bi-check2-circle text-green me-2"></i>Fixed, transparent fee structure</span>
+          </div>
+          <div class="ledger-line-item">
+            <span><i class="bi bi-check2-circle text-green me-2"></i>Dedicated accountant for every client</span>
+          </div>
+          <div class="ledger-line-item">
+            <span><i class="bi bi-check2-circle text-green me-2"></i>Secure document handling &amp; digital records</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="card-form">
+          <span class="stamp-badge"><i class="bi bi-patch-check"></i> Free 20-Minute Consultation</span>
+          <h3 class="mt-3">Talk to an accountant this week</h3>
+          <p class="text-secondary">Tell us what you need — a tax return, a new company, or an overdue audit — and we'll confirm a time that works.</p>
+          <a href="{% url 'appointments:book' %}" class="btn btn-navy w-100">Book Your Appointment</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% if testimonials %}
+<section class="ledger-section py-5 py-lg-6 bg-paper">
+  <div class="container py-4">
+    <div class="section-heading text-center mx-auto" style="max-width:640px;">
+      <span class="eyebrow d-inline-flex mx-auto">Client testimonials</span>
+      <h2>What our clients say</h2>
+    </div>
+    <div class="row g-4">
+      {% for t in testimonials %}
+      <div class="col-md-6 col-lg-4">
+        <div class="testimonial-card">
+          <div class="stars mb-2">
+            {% for s in t.stars_range %}<i class="bi bi-star-fill"></i>{% endfor %}{% for s in t.empty_stars_range %}<i class="bi bi-star"></i>{% endfor %}
+          </div>
+          <p>&ldquo;{{ t.content }}&rdquo;</p>
+          <div class="client-name">{{ t.client_name }}</div>
+          {% if t.designation %}<div class="small text-secondary">{{ t.designation }}</div>{% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% if posts %}
+<section class="py-5 py-lg-6">
+  <div class="container py-4">
+    <div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-3">
+      <div>
+        <span class="eyebrow">From the blog</span>
+        <h2 class="mt-2 mb-0">Tax &amp; compliance updates</h2>
+      </div>
+      <a href="{% url 'blog:list' %}" class="btn btn-outline-navy">Read the Blog</a>
+    </div>
+    <div class="row g-4">
+      {% for post in posts %}
+      <div class="col-md-4">
+        <a href="{{ post.get_absolute_url }}" class="text-decoration-none">
+          <div class="card-service">
+            <span class="eyebrow mb-2">{{ post.get_category_display }}</span>
+            <h3>{{ post.title }}</h3>
+            <p>{{ post.excerpt }}</p>
+          </div>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section class="bg-navy py-5">
+  <div class="container py-3 text-center">
+    <h2 class="text-white">Ready to get your accounts in order?</h2>
+    <p class="text-white-50 mb-4">Book a consultation today and speak to a chartered accountant directly.</p>
+    <a href="{% url 'appointments:book' %}" class="btn btn-brass btn-lg px-5">Book an Appointment</a>
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Download Tax Forms &amp; Documents | {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <span class="eyebrow">Resources</span>
+    <h1>Download Tax Forms &amp; Documents</h1>
+    <p class="text-white-50 mt-2 mb-0">Client checklists, income tax forms, sales tax forms and SECP documents — all in one place.</p>
+  </div>
+</div>
+
+<section class="py-5 py-lg-6">
+  <div class="container">
+    <div class="d-flex gap-2 flex-wrap mb-4">
+      <a href="{% url 'core:documents' %}" class="btn btn-sm {% if not active_category %}btn-navy{% else %}btn-outline-navy{% endif %}">All</a>
+      {% for value, label in categories %}
+      <a href="?category={{ value }}" class="btn btn-sm {% if active_category == value %}btn-navy{% else %}btn-outline-navy{% endif %}">{{ label }}</a>
+      {% endfor %}
+    </div>
+
+    <div class="row g-3">
+      {% for doc in documents %}
+      <div class="col-md-6">
+        <div class="ledger-line-item card-service py-3">
+          <div>
+            <i class="bi bi-file-earmark-arrow-down text-green fs-4 me-2"></i>
+            <strong>{{ doc.title }}</strong>
+            {% if doc.description %}<div class="small text-secondary ms-4">{{ doc.description }}</div>{% endif %}
+          </div>
+          <a href="{{ doc.file.url }}" class="btn btn-sm btn-outline-navy" download>Download</a>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12 text-center text-muted py-5">
+        <i class="bi bi-folder2-open fs-1 d-block mb-3"></i>
+        No documents available in this category yet.
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

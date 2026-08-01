@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard | {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="container d-flex justify-content-between align-items-center flex-wrap gap-3">
+    <div>
+      <span class="eyebrow">Staff area</span>
+      <h1>Admin Dashboard</h1>
+    </div>
+    <a href="/admin/" class="btn btn-brass"><i class="bi bi-gear me-1"></i>Open Full Admin Panel</a>
+  </div>
+</div>
+
+<section class="py-5">
+  <div class="container">
+    <div class="row g-4 mb-4">
+      <div class="col-md-3 col-6">
+        <div class="card-service">
+          <div class="icon-wrap"><i class="bi bi-people"></i></div>
+          <div class="stat-number text-navy fs-2 fw-bold">{{ client_count }}</div>
+          <div class="text-secondary small">Registered Clients</div>
+          <div class="small text-brass mt-1">+{{ new_clients_30d }} in last 30 days</div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="card-service">
+          <div class="icon-wrap"><i class="bi bi-calendar-check"></i></div>
+          <div class="stat-number text-navy fs-2 fw-bold">{{ appointment_count }}</div>
+          <div class="text-secondary small">Total Appointments</div>
+          <div class="small text-brass mt-1">{{ pending_appointments }} pending</div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="card-service">
+          <div class="icon-wrap"><i class="bi bi-envelope"></i></div>
+          <div class="stat-number text-navy fs-2 fw-bold">{{ total_messages }}</div>
+          <div class="text-secondary small">Contact Messages</div>
+          <div class="small text-brass mt-1">{{ unread_messages }} unread</div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="card-service">
+          <div class="icon-wrap"><i class="bi bi-journal-text"></i></div>
+          <div class="stat-number text-navy fs-2 fw-bold">{{ blog_count }}</div>
+          <div class="text-secondary small">Published Articles</div>
+          <div class="small text-brass mt-1">{{ service_count }} active services</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-lg-7">
+        <div class="card-service p-0">
+          <div class="p-3 border-bottom">
+            <h3 class="mb-0">Upcoming Appointments</h3>
+          </div>
+          <div class="table-responsive">
+            <table class="table align-middle mb-0">
+              <thead><tr><th>Client</th><th>Service</th><th>Date</th><th>Status</th><th>Reply</th><th></th></tr></thead>
+              <tbody>
+                {% for appt in upcoming_appointments %}
+                <tr>
+                  <td>{{ appt.name }}</td>
+                  <td>{{ appt.service }}</td>
+                  <td>{{ appt.preferred_date }}</td>
+                  <td><span class="badge badge-{{ appt.status }}">{{ appt.get_status_display }}</span></td>
+                  <td>
+                    {% if appt.has_reply %}
+                      <span class="badge bg-success-subtle text-success-emphasis">Replied</span>
+                    {% else %}
+                      <span class="badge bg-secondary-subtle text-secondary-emphasis">Pending</span>
+                    {% endif %}
+                  </td>
+                  <td><a href="{% url 'dashboard:appointment_reply' appt.pk %}" class="btn btn-sm btn-outline-navy">Reply</a></td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="6" class="text-center text-muted py-4">No upcoming appointments.</td></tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          <div class="p-3 border-top">
+            <a href="{% url 'dashboard:appointment_list' %}" class="btn btn-sm btn-outline-navy">Manage Appointments</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-5">
+        <div class="card-service p-0">
+          <div class="p-3 border-bottom">
+            <h3 class="mb-0">Recent Messages</h3>
+          </div>
+          <div class="p-3">
+            {% for msg in recent_messages %}
+            <div class="ledger-line-item">
+              <div>
+                <strong>{{ msg.name }}</strong>
+                <div class="small text-secondary">{{ msg.subject }}</div>
+              </div>
+              {% if not msg.is_read %}<span class="badge badge-pending">New</span>{% endif %}
+            </div>
+            {% empty %}
+            <p class="text-muted text-center py-3 mb-0">No messages yet.</p>
+            {% endfor %}
+          </div>
+          <div class="p-3 border-top">
+            <a href="/admin/contact/contactmessage/" class="btn btn-sm btn-outline-navy">View All Messages</a>
+          </div>
+        </div>
+
+        <div class="d-grid gap-2 mt-4">
+          <a href="/admin/services/service/" class="btn btn-outline-navy text-start"><i class="bi bi-receipt me-2"></i>Manage Services</a>
+          <a href="/admin/accounts/user/" class="btn btn-outline-navy text-start"><i class="bi bi-people me-2"></i>Manage Clients</a>
+          <a href="/admin/blog/blogpost/" class="btn btn-outline-navy text-start"><i class="bi bi-journal-text me-2"></i>Manage Blog Posts</a>
+          <a href="/admin/core/testimonial/" class="btn btn-outline-navy text-start"><i class="bi bi-chat-quote me-2"></i>Manage Testimonials</a>
+          <a href="/admin/core/document/" class="btn btn-outline-navy text-start"><i class="bi bi-file-earmark-arrow-down me-2"></i>Manage Documents</a>
+          <a href="/admin/core/faq/" class="btn btn-outline-navy text-start"><i class="bi bi-question-circle me-2"></i>Manage FAQs</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

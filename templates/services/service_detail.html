@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}{{ service.title }} | {{ SITE_NAME }}{% endblock %}
+{% block meta_description %}{{ service.short_description }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <span class="eyebrow"><a href="{% url 'services:list' %}" class="text-white-50">Services</a> / {{ service.title }}</span>
+    <h1>{{ service.title }}</h1>
+  </div>
+</div>
+
+<section class="py-5 py-lg-6">
+  <div class="container">
+    <div class="row g-5">
+      <div class="col-lg-8">
+        <div class="icon-wrap mb-3"><i class="bi {{ service.icon }}"></i></div>
+        <p class="lead">{{ service.short_description }}</p>
+        <div class="ledger-rule my-4"></div>
+        <div class="text-secondary" style="white-space: pre-line;">{{ service.description }}</div>
+      </div>
+      <div class="col-lg-4">
+        <div class="card-form">
+          {% if service.fee_note %}
+          <span class="stamp-badge mb-3"><i class="bi bi-tag"></i> {{ service.fee_note }}</span>
+          {% endif %}
+          <h3 class="mt-3">Request this service</h3>
+          <p class="text-secondary small">Book a slot and we'll confirm within one business day.</p>
+          <a href="{% url 'appointments:book' %}" class="btn btn-navy w-100 mb-2">Book Appointment</a>
+          <a href="{% url 'contact:contact' %}" class="btn btn-outline-navy w-100">Ask a Question</a>
+        </div>
+      </div>
+    </div>
+
+    {% if related %}
+    <div class="mt-5 pt-4">
+      <h4 class="mb-4">Related services</h4>
+      <div class="row g-4">
+        {% for r in related %}
+        <div class="col-md-4">
+          <a href="{{ r.get_absolute_url }}" class="text-decoration-none">
+            <div class="card-service">
+              <div class="icon-wrap"><i class="bi {{ r.icon }}"></i></div>
+              <h3>{{ r.title }}</h3>
+              <p>{{ r.short_description }}</p>
+            </div>
+          </a>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

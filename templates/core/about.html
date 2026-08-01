@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% block title %}About Us | {{ SITE_NAME }}{% endblock %}
+{% block meta_description %}Learn about Munib and Co, a Chartered Certified Accountant firm serving individuals and businesses across Pakistan with tax, audit and compliance expertise.{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <span class="eyebrow">About the firm</span>
+    <h1>Built on ledgers, not shortcuts</h1>
+    <p class="text-white-50 mt-2 mb-0" style="max-width:640px;">Munib and Co was founded to give individuals and small businesses the same standard of accounting rigor that large corporates expect from their in-house teams.</p>
+  </div>
+</div>
+
+<section class="py-5 py-lg-6">
+  <div class="container">
+    <div class="row g-5 align-items-start">
+      <div class="col-lg-6">
+        <span class="eyebrow">Our story</span>
+        <h2 class="mt-3">Two decades of getting the numbers right</h2>
+        <p class="text-secondary mt-3">What started as a single practitioner's office handling tax returns for local traders in Swat has grown into a full-service accounting practice. We still take the same approach we started with: read every document, verify every figure, and never file anything we haven't checked ourselves.</p>
+        <p class="text-secondary">Today we support sole proprietors, partnerships and private limited companies with everything from monthly bookkeeping to statutory audits and SECP incorporation.</p>
+      </div>
+      <div class="col-lg-6">
+        <div class="row g-3">
+          <div class="col-6">
+            <div class="card-service text-center">
+              <div class="stat-number text-navy fs-2 fw-bold">15+</div>
+              <div class="text-secondary small">Years of practice</div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="card-service text-center">
+              <div class="stat-number text-navy fs-2 fw-bold">1,200+</div>
+              <div class="text-secondary small">Returns filed</div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="card-service text-center">
+              <div class="stat-number text-navy fs-2 fw-bold">300+</div>
+              <div class="text-secondary small">Companies incorporated</div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="card-service text-center">
+              <div class="stat-number text-navy fs-2 fw-bold">98%</div>
+              <div class="text-secondary small">Client retention</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ledger-section py-5 py-lg-6 bg-paper">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="card-service">
+          <div class="icon-wrap"><i class="bi bi-bullseye"></i></div>
+          <h3>Our Mission</h3>
+          <p>Make professional accounting and tax compliance accessible, understandable and reliable for every client, regardless of business size.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card-service">
+          <div class="icon-wrap"><i class="bi bi-eye"></i></div>
+          <h3>Our Vision</h3>
+          <p>To be the most trusted chartered accountancy practice in Khyber Pakhtunkhwa, known for accuracy and integrity.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card-service">
+          <div class="icon-wrap"><i class="bi bi-shield-check"></i></div>
+          <h3>Our Values</h3>
+          <p>Accuracy, confidentiality and transparency in every engagement — no exceptions, no shortcuts.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% if team %}
+<section class="py-5 py-lg-6">
+  <div class="container">
+    <div class="section-heading text-center mx-auto" style="max-width:640px;">
+      <span class="eyebrow d-inline-flex mx-auto">Our people</span>
+      <h2>The team behind the ledgers</h2>
+    </div>
+    <div class="row g-4">
+      {% for member in team %}
+      <div class="col-md-4 col-lg-3">
+        <div class="card-service text-center">
+          {% if member.photo %}
+          <img src="{{ member.photo.url }}" alt="{{ member.name }}" class="rounded-circle mb-3" width="84" height="84" style="object-fit:cover;">
+          {% else %}
+          <div class="icon-wrap mx-auto" style="width:84px;height:84px;font-size:2rem;"><i class="bi bi-person"></i></div>
+          {% endif %}
+          <h3>{{ member.name }}</h3>
+          <p class="text-brass small fw-semibold">{{ member.designation }}</p>
+          <p class="small">{{ member.bio }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section class="bg-navy py-5">
+  <div class="container py-3 text-center">
+    <h2 class="text-white">Let's get your accounts in order</h2>
+    <a href="{% url 'appointments:book' %}" class="btn btn-brass btn-lg px-5 mt-3">Book a Consultation</a>
+  </div>
+</section>
+{% endblock %}

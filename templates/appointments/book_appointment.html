@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Book an Appointment | {{ SITE_NAME }}{% endblock %}
+{% block meta_description %}Book a free consultation with Munib and Co for tax filing, SECP incorporation, bookkeeping, audit or compliance services.{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <span class="eyebrow">Schedule a visit</span>
+    <h1>Book an Appointment</h1>
+    <p class="text-white-50 mt-2 mb-0">Pick a service and a preferred time. We'll confirm by email within one business day.</p>
+  </div>
+</div>
+
+<section class="py-5 py-lg-6">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="card-form">
+          <form method="post" class="needs-validation" novalidate>
+            {% csrf_token %}
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="{{ form.name.id_for_label }}">Full Name</label>
+                {{ form.name }}
+              </div>
+              <div class="col-md-6">
+                <label for="{{ form.email.id_for_label }}">Email</label>
+                {{ form.email }}
+              </div>
+              <div class="col-md-6">
+                <label for="{{ form.phone.id_for_label }}">Phone</label>
+                {{ form.phone }}
+              </div>
+              <div class="col-md-6">
+                <label for="{{ form.service.id_for_label }}">Service Needed</label>
+                {{ form.service }}
+              </div>
+              <div class="col-md-6">
+                <label for="{{ form.preferred_date.id_for_label }}">Preferred Date</label>
+                {{ form.preferred_date }}
+              </div>
+              <div class="col-md-6">
+                <label for="{{ form.preferred_time.id_for_label }}">Preferred Time</label>
+                {{ form.preferred_time }}
+              </div>
+              <div class="col-12">
+                <label for="{{ form.message.id_for_label }}">Tell us a bit about your requirement</label>
+                {{ form.message }}
+              </div>
+            </div>
+            <button type="submit" class="btn btn-brass px-4 mt-4">Submit Appointment Request</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

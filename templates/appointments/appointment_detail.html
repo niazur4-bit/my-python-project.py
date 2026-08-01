@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block title %}Appointment Details | {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <span class="eyebrow">My Appointments</span>
+    <h1>{{ appointment.service }}</h1>
+    <p class="mb-0">{{ appointment.preferred_date }} at {{ appointment.preferred_time }} &middot; <span class="badge badge-{{ appointment.status }}">{{ appointment.get_status_display }}</span></p>
+  </div>
+</div>
+
+<section class="py-5">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-5">
+        {% if appointment.message %}
+        <div class="card-service mb-4">
+          <h3 class="fs-5 mb-2">Your Message</h3>
+          <p class="mb-0 fst-italic">&ldquo;{{ appointment.message }}&rdquo;</p>
+        </div>
+        {% endif %}
+
+        {% if appointment.has_reply %}
+        <div class="card-service mb-4">
+          <h3 class="fs-5 mb-2">Reply from Munib and Co</h3>
+          <div class="ledger-reply-box">
+            <p class="mb-1">{{ appointment.admin_reply|linebreaksbr }}</p>
+            <span class="small text-secondary">Replied {{ appointment.replied_at|date:"d M Y, H:i" }}</span>
+          </div>
+        </div>
+        {% endif %}
+
+        <div class="card-service">
+          <h3 class="fs-5 mb-3">Upload a Document</h3>
+          <p class="small text-secondary">Share a file with Munib and Co for this appointment &mdash; for example a CNIC copy, bank statement, or supporting document. Accepted: PDF, JPG, PNG, DOC/DOCX, XLS/XLSX (max 10MB).</p>
+          <form method="post" enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
+            <div class="mb-3">
+              {{ form.file }}
+              {% if form.file.errors %}
+              <div class="text-danger small mt-1">{{ form.file.errors.0 }}</div>
+              {% endif %}
+            </div>
+            <div class="mb-3">
+              {{ form.note }}
+            </div>
+            <button type="submit" class="btn btn-brass w-100">Upload Document</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="col-lg-7">
+        <div class="card-service p-0">
+          <div class="p-3 border-bottom">
+            <h3 class="fs-5 mb-0">Shared Documents</h3>
+          </div>
+          <div class="table-responsive">
+            <table class="table align-middle mb-0">
+              <thead>
+                <tr><th>File</th><th>Shared By</th><th>Date</th><th></th></tr>
+              </thead>
+              <tbody>
+                {% for doc in documents %}
+                <tr>
+                  <td>
+                    <i class="bi bi-file-earmark-text me-1"></i>{{ doc.note|default:doc.filename }}
+                  </td>
+                  <td>
+                    {% if doc.uploaded_by_staff %}
+                      <span class="badge bg-success-subtle text-success-emphasis">Munib and Co</span>
+                    {% else %}
+                      <span class="badge bg-secondary-subtle text-secondary-emphasis">You</span>
+                    {% endif %}
+                  </td>
+                  <td class="small text-secondary">{{ doc.uploaded_at|date:"d M Y" }}</td>
+                  <td>
+                    <a href="{% url 'appointments:document_download' doc.pk %}" class="btn btn-sm btn-outline-navy">
+                      <i class="bi bi-download"></i> Download
+                    </a>
+                  </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="4" class="text-center text-muted py-4">No documents shared yet.</td></tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <a href="{% url 'appointments:my_appointments' %}" class="btn btn-outline-navy mt-4">Back to My Appointments</a>
+  </div>
+</section>
+{% endblock %}

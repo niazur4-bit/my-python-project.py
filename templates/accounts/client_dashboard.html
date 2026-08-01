@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}My Dashboard | {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <span class="eyebrow">Client portal</span>
+    <h1>Welcome, {{ user.first_name|default:user.username }}</h1>
+  </div>
+</div>
+
+<section class="py-5">
+  <div class="container">
+    <div class="row g-4 mb-4">
+      <div class="col-md-4">
+        <div class="card-service text-center">
+          <div class="stat-number text-navy fs-2 fw-bold">{{ appointment_count }}</div>
+          <div class="text-secondary small">Total Appointments</div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card-service text-center">
+          <div class="stat-number text-navy fs-2 fw-bold">{{ pending_count }}</div>
+          <div class="text-secondary small">Pending Confirmation</div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card-service text-center">
+          <a href="{% url 'appointments:book' %}" class="btn btn-brass w-100 h-100 d-flex align-items-center justify-content-center">Book New Appointment</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-service p-0">
+      <div class="table-responsive">
+        <table class="table align-middle mb-0">
+          <thead>
+            <tr><th>Service</th><th>Date</th><th>Time</th><th>Status</th><th>Reply</th></tr>
+          </thead>
+          <tbody>
+            {% for appt in appointments %}
+            <tr>
+              <td>{{ appt.service }}</td>
+              <td>{{ appt.preferred_date }}</td>
+              <td>{{ appt.preferred_time }}</td>
+              <td><span class="badge badge-{{ appt.status }}">{{ appt.get_status_display }}</span></td>
+              <td>
+                {% if appt.has_reply %}
+                  <span class="badge bg-success-subtle text-success-emphasis"><i class="bi bi-chat-left-text me-1"></i>Replied</span>
+                {% else %}
+                  <span class="text-secondary small">&mdash;</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5" class="text-center text-muted py-4">No appointments yet.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="d-flex gap-2 mt-4">
+      <a href="{% url 'appointments:my_appointments' %}" class="btn btn-outline-navy">View All Appointments</a>
+      <a href="{% url 'accounts:profile' %}" class="btn btn-outline-navy">Edit Profile</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

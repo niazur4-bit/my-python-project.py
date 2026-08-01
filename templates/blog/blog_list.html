@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Blog &amp; News | {{ SITE_NAME }}{% endblock %}
+{% block meta_description %}Tax updates, SECP compliance guides and firm news from Munib and Co, Chartered Certified Accountants.{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <span class="eyebrow">Insights</span>
+    <h1>Blog &amp; News</h1>
+  </div>
+</div>
+
+<section class="py-5 py-lg-6">
+  <div class="container">
+    <div class="d-flex gap-2 flex-wrap mb-4">
+      <a href="{% url 'blog:list' %}" class="btn btn-sm {% if not active_category %}btn-navy{% else %}btn-outline-navy{% endif %}">All</a>
+      {% for value, label in categories %}
+      <a href="?category={{ value }}" class="btn btn-sm {% if active_category == value %}btn-navy{% else %}btn-outline-navy{% endif %}">{{ label }}</a>
+      {% endfor %}
+    </div>
+
+    <div class="row g-4">
+      {% for post in page_obj %}
+      <div class="col-md-6 col-lg-4">
+        <a href="{{ post.get_absolute_url }}" class="text-decoration-none">
+          <div class="card-service h-100">
+            {% if post.featured_image %}
+            <img src="{{ post.featured_image.url }}" class="w-100 mb-3" style="height:160px; object-fit:cover; border-radius:3px;" alt="{{ post.title }}">
+            {% endif %}
+            <span class="eyebrow mb-2">{{ post.get_category_display }}</span>
+            <h3>{{ post.title }}</h3>
+            <p>{{ post.excerpt }}</p>
+            <div class="small text-secondary mt-2">{{ post.published_at|date:"d M Y" }}</div>
+          </div>
+        </a>
+      </div>
+      {% empty %}
+      <div class="col-12 text-center text-muted py-5">
+        <i class="bi bi-journal-text fs-1 d-block mb-3"></i>
+        No articles published yet.
+      </div>
+      {% endfor %}
+    </div>
+
+    {% if page_obj.has_other_pages %}
+    <nav class="mt-5" aria-label="Blog pagination">
+      <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if active_category %}&category={{ active_category }}{% endif %}">Previous</a></li>
+        {% endif %}
+        {% for num in page_obj.paginator.page_range %}
+        <li class="page-item {% if page_obj.number == num %}active{% endif %}"><a class="page-link" href="?page={{ num }}{% if active_category %}&category={{ active_category }}{% endif %}">{{ num }}</a></li>
+        {% endfor %}
+        {% if page_obj.has_next %}
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}{% if active_category %}&category={{ active_category }}{% endif %}">Next</a></li>
+        {% endif %}
+      </ul>
+    </nav>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

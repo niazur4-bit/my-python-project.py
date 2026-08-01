@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}My Appointments | {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <span class="eyebrow">Your account</span>
+    <h1>My Appointments</h1>
+  </div>
+</div>
+
+<section class="py-5">
+  <div class="container">
+    <div class="table-responsive card-service p-0">
+      <table class="table align-middle mb-0">
+        <thead>
+          <tr>
+            <th>Service</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Status</th>
+            <th>Requested</th>
+            <th>Reply from Munib and Co</th>
+            <th>Documents</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for appt in appointments %}
+          <tr>
+            <td>{{ appt.service }}</td>
+            <td>{{ appt.preferred_date }}</td>
+            <td>{{ appt.preferred_time }}</td>
+            <td><span class="badge badge-{{ appt.status }}">{{ appt.get_status_display }}</span></td>
+            <td>{{ appt.created_at|date:"d M Y" }}</td>
+            <td>
+              {% if appt.has_reply %}
+                <div class="ledger-reply-box">
+                  <p class="mb-1">{{ appt.admin_reply|linebreaksbr }}</p>
+                  <span class="small text-secondary">Replied {{ appt.replied_at|date:"d M Y, H:i" }}</span>
+                </div>
+              {% else %}
+                <span class="small text-secondary">Awaiting reply</span>
+              {% endif %}
+            </td>
+            <td>
+              {% with doc_count=appt.documents.count %}
+              {% if doc_count %}
+                <span class="badge bg-success-subtle text-success-emphasis">{{ doc_count }} file{{ doc_count|pluralize }}</span>
+              {% else %}
+                <span class="small text-secondary">None yet</span>
+              {% endif %}
+              {% endwith %}
+            </td>
+            <td><a href="{% url 'appointments:detail' appt.pk %}" class="btn btn-sm btn-outline-navy">View</a></td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="8" class="text-center text-muted py-4">You have no appointments yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <a href="{% url 'appointments:book' %}" class="btn btn-navy mt-4">Book a New Appointment</a>
+  </div>
+</section>
+{% endblock %}

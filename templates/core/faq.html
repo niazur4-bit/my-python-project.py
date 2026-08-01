@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Frequently Asked Questions | {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <span class="eyebrow">Support</span>
+    <h1>Frequently Asked Questions</h1>
+  </div>
+</div>
+
+<section class="py-5 py-lg-6">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-9">
+        <div class="accordion" id="faqAccordion">
+          {% for faq in faqs %}
+          <div class="accordion-item mb-3" style="border:1px solid var(--rule); border-radius:3px;">
+            <h2 class="accordion-header">
+              <button class="accordion-button {% if not forloop.first %}collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#faq{{ forloop.counter }}">
+                {{ faq.question }}
+              </button>
+            </h2>
+            <div id="faq{{ forloop.counter }}" class="accordion-collapse collapse {% if forloop.first %}show{% endif %}" data-bs-parent="#faqAccordion">
+              <div class="accordion-body text-secondary">{{ faq.answer }}</div>
+            </div>
+          </div>
+          {% empty %}
+          <p class="text-center text-muted">FAQs will appear here once added from the admin panel.</p>
+          {% endfor %}
+        </div>
+
+        <div class="card-form text-center mt-5">
+          <h3>Still have a question?</h3>
+          <p class="text-secondary">Our team is happy to walk you through anything tax or compliance related.</p>
+          <a href="{% url 'contact:contact' %}" class="btn btn-navy">Contact Us</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

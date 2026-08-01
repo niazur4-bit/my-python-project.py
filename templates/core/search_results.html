@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Search Results | {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <span class="eyebrow">Search</span>
+    <h1>Results for "{{ query }}"</h1>
+    <p class="text-white-50 mt-2 mb-0">{{ result_count }} result{{ result_count|pluralize }} found</p>
+  </div>
+</div>
+
+<section class="py-5 py-lg-6">
+  <div class="container">
+    {% if services %}
+    <h4 class="mb-3">Services</h4>
+    <div class="row g-4 mb-5">
+      {% for service in services %}
+      <div class="col-md-4">
+        <a href="{{ service.get_absolute_url }}" class="text-decoration-none">
+          <div class="card-service">
+            <div class="icon-wrap"><i class="bi {{ service.icon }}"></i></div>
+            <h3>{{ service.title }}</h3>
+            <p>{{ service.short_description }}</p>
+          </div>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if blog_posts %}
+    <h4 class="mb-3">Blog Articles</h4>
+    <div class="row g-4">
+      {% for post in blog_posts %}
+      <div class="col-md-4">
+        <a href="{{ post.get_absolute_url }}" class="text-decoration-none">
+          <div class="card-service">
+            <span class="eyebrow mb-2">{{ post.get_category_display }}</span>
+            <h3>{{ post.title }}</h3>
+            <p>{{ post.excerpt }}</p>
+          </div>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if not services and not blog_posts %}
+    <div class="text-center text-muted py-5">
+      <i class="bi bi-search fs-1 d-block mb-3"></i>
+      {% if query %}No results found for "{{ query }}". Try a different search term.{% else %}Enter a search term above.{% endif %}
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

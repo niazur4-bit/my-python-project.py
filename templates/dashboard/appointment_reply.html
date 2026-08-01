@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% block title %}Reply to {{ appointment.name }} | {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <span class="eyebrow">Staff area</span>
+    <h1>Reply to {{ appointment.name }}</h1>
+  </div>
+</div>
+
+<section class="py-5">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-5">
+        <div class="card-service">
+          <h3 class="fs-5 mb-3">Appointment Details</h3>
+          <dl class="mb-0">
+            <dt class="small text-secondary">Client</dt>
+            <dd>{{ appointment.name }} &middot; {{ appointment.email }} &middot; {{ appointment.phone }}</dd>
+
+            <dt class="small text-secondary mt-2">Service</dt>
+            <dd>{{ appointment.service }}</dd>
+
+            <dt class="small text-secondary mt-2">Preferred Date &amp; Time</dt>
+            <dd>{{ appointment.preferred_date }} at {{ appointment.preferred_time }}</dd>
+
+            {% if appointment.message %}
+            <dt class="small text-secondary mt-2">Client's Message</dt>
+            <dd class="fst-italic">&ldquo;{{ appointment.message }}&rdquo;</dd>
+            {% endif %}
+
+            {% if appointment.replied_at %}
+            <dt class="small text-secondary mt-2">Last Replied</dt>
+            <dd>{{ appointment.replied_at|date:"d M Y, H:i" }}</dd>
+            {% endif %}
+          </dl>
+        </div>
+      </div>
+
+      <div class="col-lg-7">
+        <div class="card-service">
+          <h3 class="fs-5 mb-3">Your Reply</h3>
+          <p class="small text-secondary">This reply and any status change will be visible to the client on their account, and the client will be emailed a copy automatically.</p>
+          <form method="post" novalidate>
+            {% csrf_token %}
+            <input type="hidden" name="form_name" value="reply">
+            <div class="mb-3">
+              <label for="{{ form.status.id_for_label }}" class="form-label">{{ form.status.label }}</label>
+              {{ form.status }}
+            </div>
+            <div class="mb-3">
+              <label for="{{ form.admin_reply.id_for_label }}" class="form-label">{{ form.admin_reply.label }}</label>
+              {{ form.admin_reply }}
+              {% if form.admin_reply.errors %}
+              <div class="text-danger small mt-1">{{ form.admin_reply.errors.0 }}</div>
+              {% endif %}
+            </div>
+            <div class="d-flex gap-2">
+              <button type="submit" class="btn btn-brass">Save &amp; Send Reply</button>
+              <a href="{% url 'dashboard:appointment_list' %}" class="btn btn-outline-navy">Cancel</a>
+            </div>
+          </form>
+        </div>
+
+        <div class="card-service mt-4">
+          <h3 class="fs-5 mb-3">Share a Document</h3>
+          <p class="small text-secondary">Upload a file for the client to download &mdash; e.g. the completed return or a receipt. They'll be emailed automatically. Accepted: PDF, JPG, PNG, DOC/DOCX, XLS/XLSX (max 10MB).</p>
+          <form method="post" enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
+            <input type="hidden" name="form_name" value="document">
+            <div class="mb-3">
+              {{ doc_form.file }}
+              {% if doc_form.file.errors %}
+              <div class="text-danger small mt-1">{{ doc_form.file.errors.0 }}</div>
+              {% endif %}
+            </div>
+            <div class="mb-3">
+              {{ doc_form.note }}
+            </div>
+            <button type="submit" class="btn btn-outline-navy">Upload Document</button>
+          </form>
+
+          <hr class="my-4">
+
+          <h4 class="fs-6 mb-3">Shared Documents</h4>
+          <div class="table-responsive">
+            <table class="table align-middle mb-0">
+              <thead>
+                <tr><th>File</th><th>Shared By</th><th>Date</th><th></th></tr>
+              </thead>
+              <tbody>
+                {% for doc in documents %}
+                <tr>
+                  <td><i class="bi bi-file-earmark-text me-1"></i>{{ doc.note|default:doc.filename }}</td>
+                  <td>
+                    {% if doc.uploaded_by_staff %}
+                      <span class="badge bg-success-subtle text-success-emphasis">Munib and Co</span>
+                    {% else %}
+                      <span class="badge bg-secondary-subtle text-secondary-emphasis">{{ appointment.name }}</span>
+                    {% endif %}
+                  </td>
+                  <td class="small text-secondary">{{ doc.uploaded_at|date:"d M Y" }}</td>
+                  <td><a href="{% url 'appointments:document_download' doc.pk %}" class="btn btn-sm btn-outline-navy"><i class="bi bi-download"></i></a></td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="4" class="text-center text-muted py-3">No documents shared yet.</td></tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
