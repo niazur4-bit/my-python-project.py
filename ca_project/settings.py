@@ -8,7 +8,7 @@ import environ
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 env = environ.Env(
-    DEBUG=(bool, True),
+    DEBUG=(bool, False),
 )
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
@@ -75,7 +75,7 @@ TEMPLATES = [
 WSGI_APPLICATION = "ca_project.wsgi.application"
 ASGI_APPLICATION = "ca_project.asgi.application"
 
-if env.bool("USE_POSTGRES", default=False):
+if env.bool("USE_POSTGRES", default=True):
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
